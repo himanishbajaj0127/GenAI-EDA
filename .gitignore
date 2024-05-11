@@ -39,5 +39,5 @@ MANIFEST
 # Windows specific files
 Thumbs.db
 
-#virtual env
-venv
+# Virtual environment
+venv/
