@@ -116,6 +116,6 @@ if uploaded_file is not None:
     st.divider()
 
     # My branding
-    st.write("**Created by Ⓗ • Ⓑ**")
+    st.write("**Created by【H】【B】**")
 else:
     st.info("Please upload a file to proceed.")
