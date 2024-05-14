@@ -46,22 +46,29 @@ if uploaded_file is not None:
     data = data.reset_index()
     data.columns = data.columns.str.title()
 
-    # Overview of the data
-    st.write('### 1. Dataset Preview ')
-    try:
-        st.dataframe(data, use_container_width=True, hide_index=True)
-    except:
-        st.info("The file wasn't read properly. Please ensure that the input parameters are correctly defined.")
-        sys.exit()
+    # Create tabs
+    tab1, tab2, tab3 = st.tabs(["Data Overview", "Data Understanding Parameters", "Visualization Studio"])
 
-    # Horizontal divider
-    st.divider()
-    #Horizontal divider in sidebar
-    st.sidebar.divider()
+    with tab1:
+        # Overview of the data
+        st.write('### 1. Dataset Preview ')
+        try:
+            st.dataframe(data, use_container_width=True, hide_index=True)
+        except:
+            st.info("The file wasn't read properly. Please ensure that the input parameters are correctly defined.")
+            st.stop()
 
-    # Displaying data understanding parameters
-    st.write('### 2. High-Level Overview ')
-    selected = st.sidebar.radio("**Data Understanding Parameters**",
+        # Horizontal divider
+        st.divider()
+
+        # Display data dimensions
+        st.write('###### The data has the dimensions :', data.shape)
+
+    with tab2:
+        # Displaying data understanding parameters
+        st.write('### 2. High-Level Overview ')
+        
+        selected = st.selectbox("Select a parameter to display",
                                 ["Data Dimensions",
                                  "Field Descriptions",
                                  "Summary Statistics",
@@ -74,50 +81,41 @@ if uploaded_file is not None:
                                  "Feature Engineering Suggestions",
                                  "Target Variable Analysis",
                                  "Interactive Visualization Tools"])
-    
-    if selected == 'Field Descriptions':
-        dup.display_field_descriptions(data)
-    elif selected == 'Summary Statistics':
-        dup.display_summary_statistics(data)
-    elif selected == 'Value Counts of Fields':
-        dup.display_value_counts(data)
-    elif selected == 'Missing Values Analysis':
-        dup.display_missing_values_analysis(data)
-    elif selected == 'Data Distribution':
-        dup.display_data_distribution(data)
-    elif selected == 'Correlation Analysis':
-        dup.display_correlation_analysis(data)
-    elif selected == 'Outlier Detection':
-        dup.display_outlier_detection(data)
-    elif selected == 'Data Transformation':
-        dup.display_data_transformation(data)
-    elif selected == 'Feature Engineering Suggestions':
-        dup.display_feature_engineering_suggestions(data)
-    elif selected == 'Target Variable Analysis':
-        dup.display_target_variable_analysis(data)
-    elif selected == 'Interactive Visualization Tools':
-        dup.display_interactive_visualization_tools(data)
-    else:
-        st.write('###### The data has the dimensions :', data.shape)
+        
+        if selected == 'Field Descriptions':
+            dup.display_field_descriptions(data)
+        elif selected == 'Summary Statistics':
+            dup.display_summary_statistics(data)
+        elif selected == 'Value Counts of Fields':
+            dup.display_value_counts(data)
+        elif selected == 'Missing Values Analysis':
+            dup.display_missing_values_analysis(data)
+        elif selected == 'Data Distribution':
+            dup.display_data_distribution(data)
+        elif selected == 'Correlation Analysis':
+            dup.display_correlation_analysis(data)
+        elif selected == 'Outlier Detection':
+            dup.display_outlier_detection(data)
+        elif selected == 'Data Transformation':
+            dup.display_data_transformation(data)
+        elif selected == 'Feature Engineering Suggestions':
+            dup.display_feature_engineering_suggestions(data)
+        elif selected == 'Target Variable Analysis':
+            dup.display_target_variable_analysis(data)
+        elif selected == 'Interactive Visualization Tools':
+            dup.display_interactive_visualization_tools(data)
+        else:
+            st.write('###### The data has the dimensions :', data.shape)
 
-    # Horizontal divider
-    st.divider()
-    #Horizontal divider in sidebar
-    st.sidebar.divider()
-
-    # Visualisation section
-    st.write('### Visualisation')
-    vis_select = st.sidebar.checkbox("**Visualisation Studio**")
-    
-    if vis_select:
+    with tab3:
+        # Visualization section
+        st.write('### Visualization Studio')
         vs.render_visual_insights(data)
-    else:
-        st.info("Please upload a file to proceed.")
 
     # Horizontal divider
     st.divider()
 
     # My branding
-    st.write("**Created by IT Foools**")
+    st.write("**Created by Ⓗ • Ⓑ**")
 else:
     st.info("Please upload a file to proceed.")
