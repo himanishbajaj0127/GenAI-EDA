@@ -3,6 +3,7 @@ import pandas as pd
 import file_upload
 import data_understanding_parameters as dup
 import visualisation_studio as vs
+import chatbot  # Import the chatbot module
 
 def set_page_config():
     st.set_page_config(page_title='DataSense AI', page_icon=None, layout="wide")
@@ -49,7 +50,7 @@ def display_data_overview(data):
     st.write('###### The data has the dimensions:', data.shape)
 
 def display_data_understanding(data):
-    st.write('### 2. High-Level Overview')
+    st.write('### 2. EDA Parameters')
     
     selected = st.selectbox("Select a parameter to display", [
         "Data Dimensions",
@@ -92,8 +93,42 @@ def display_data_understanding(data):
         st.write('###### The data has the dimensions :', data.shape)
 
 def display_visualization_studio(data):
-    st.write('### Visualization Studio')
+    st.write('### 3. Visualization Studio')
     vs.render_visual_insights(data)
+
+def chat_interface(df, openai_api_key):
+    st.write("### 4. DataSense ChatBot 🌏")
+
+    if df is None:
+        st.warning(
+            "Please upload the file in the Data Overview tab, otherwise you won't be able to talk with the AI DataFrame ChatBot!"
+        )
+        return
+
+    if not openai_api_key:
+        st.warning("Please add your OpenAI API key in the sidebar to continue the GPT-3.5 Turbo conversation.")
+        return
+
+    if "messages" not in st.session_state:
+        st.session_state["messages"] = []
+
+    # Chat history display
+    st.subheader("Chat History")
+    for msg in st.session_state["messages"]:
+        if msg["role"] == "user":
+            st.markdown(f"<font color='#4682B4'>🔵User: {msg['content']}</font>", unsafe_allow_html=True)
+        else:
+            st.markdown(f"<font color='#FFFFFF'>⚪DataSense AI: {msg['content']}</font>", unsafe_allow_html=True)
+
+    # User input
+    user_input = st.text_input("Type your message here:", key="user_input")
+    if st.button("Send"):
+        if user_input.strip() != "":
+            st.session_state["messages"].append({"role": "user", "content": user_input.strip()})
+            agent = chatbot.create_agent(openai_api_key, df)
+            response = chatbot.get_response(agent, st.session_state["messages"])
+            st.session_state["messages"].append({"role": "assistant", "content": response})
+            st.markdown(f"<font color='#FFFFFF'>⚪ DataSense AI: {response}</font>", unsafe_allow_html=True)
 
 def main():
     set_page_config()
@@ -105,8 +140,10 @@ def main():
     if uploaded_file is not None:
         with st.spinner('Loading data...'):
             data = read_data(uploaded_file, file_type)
+
+        openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
         
-        tab1, tab2, tab3 = st.tabs(["Data Overview", "Data Understanding Parameters", "Visualization Studio"])
+        tab1, tab2, tab3, tab4 = st.tabs(["Data Overview", "Data Understanding Parameters", "Visualization Studio", "Chatbot"])
 
         with tab1:
             display_data_overview(data)
@@ -117,8 +154,12 @@ def main():
         with tab3:
             display_visualization_studio(data)
         
+        with tab4:
+            chat_interface(data, openai_api_key)
+
         st.divider()
         st.write("**Created by【H】【B】**")
+
     else:
         st.info("Please upload a file to proceed.")
 
