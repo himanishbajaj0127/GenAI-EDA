@@ -1,7 +1,7 @@
 # Exploratory Data Analysis (EDA) App Documentation
 
 ## App Name: DataSense AI
-https://datasense-ai.streamlit.app/
+App Link: https://datasense-ai.streamlit.app/
 
 ## Introduction
 
