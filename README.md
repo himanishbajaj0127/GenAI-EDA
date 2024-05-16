@@ -1,5 +1,8 @@
 # Exploratory Data Analysis (EDA) App Documentation
 
+## App Name: DataSense AI
+https://datasense-ai.streamlit.app/
+
 ## Introduction
 
 Welcome to the Exploratory Data Analysis (EDA) App! This interactive web-based tool is designed to empower users with the ability to effortlessly explore and analyze datasets. Whether you're a data scientist, analyst, or researcher, this app provides a seamless experience for gaining valuable insights from your data.
