@@ -63,7 +63,7 @@ To run the EDA App, ensure you have the following prerequisites installed:
 
 2. **Run the app using Streamlit**:
    ```sh
-   streamlit run app.py
+   streamlit run streamlit_app.py
    ```
 
 ## Application Walkthrough
